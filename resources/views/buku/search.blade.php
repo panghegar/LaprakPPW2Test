@@ -12,21 +12,21 @@
     <div class="container">
 
     @if(count($data_buku))
-    <div class="alert alert-success mt-5">
+    <div class="alert alert-success">
         Ditemukan <strong>{{ count($data_buku) }}</strong> data dengan kata: <strong>{{ $cari }}</strong>
     </div>
     @else
-        <div class="alert alert-warnin" ><h4>Data {{ $cari }} tidak ditemukan</h4>
+        <div class="alert alert-warning"><h4>Data {{ $cari }} tidak ditemukan</h4>
         <a href="/buku" class="btn btn-warning">Kembali</a></div>
     @endif
 
      @if (Session::has('pesan_sukses'))
         <div class="alert alert-success">{{Session::get('pesan_sukses')}}</div>
     @endif
-    <a href="{{route('buku.create')}}" class="btn btn-primary float-end mt-5 mx-14">Tambah Buku</a>
+    <a href="{{route('buku.create')}}" class="btn btn-primary float-end mt-5">Tambah Buku</a>
     <form action="{{ route('buku.search') }}" method="get">
         @csrf
-        <input type="text" name="kata" class="form-control mt-5 mr-3" placeholder="Cari ..." style="width: 30%; display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">
+        <input type="text" name="kata" class="form-control" placeholder="Cari ..." style="width: 30%; display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">
     </form>
 
     <table class="table table-striped">
@@ -61,14 +61,10 @@
         </tbody>
     </table>
 
-    <!-- Menampilkan jumlah total buku -->
-    <p><strong>Jumlah Total Buku:</strong> {{ $total_buku }}</p>
-
-    <!-- Menampilkan total harga semua buku -->
-    <p><strong>Total Harga Semua Buku:</strong> {{ "Rp. " . number_format($total_harga, 2, ',', '.') }}</p>
 
     <!-- Pagination -->
     {{$data_buku->links()}}
+
 
     </div>
    

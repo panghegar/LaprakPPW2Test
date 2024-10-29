@@ -31,7 +31,7 @@ class BukuController extends Controller
     //     return view('buku.index', compact('data_buku', 'total_buku', 'total_harga'));    
     // }
 
-    public function index()
+    public function index(Request $request)
     {
     $batas = 5;
     // Hapus `all()`, langsung gunakan `paginate()`
@@ -42,8 +42,17 @@ class BukuController extends Controller
     
     // Menghitung total harga semua buku
     $total_harga = Buku::sum('harga');
+
+    $batas = 5;
+    $cari = $request->kata;
+    $data_buku = Buku::where('judul', 'like', "%" . $cari . "%")
+        ->orWhere('penulis', 'like', "%" . $cari . "%")
+        ->paginate($batas);
     
-    return view('buku.dashboard', compact('data_buku', 'total_buku', 'total_harga'));
+    $jumlah_buku = $data_buku->count();
+    $no = $batas * ($data_buku->currentPage() - 1);
+        
+    return view('buku.index', compact('data_buku', 'total_buku', 'total_harga', 'cari'));
     }
 
 
@@ -77,8 +86,9 @@ class BukuController extends Controller
         $buku->save();
     
         // Redirect dengan pesan sukses
-        return redirect('/buku')->with('pesan', 'Data buku berhasil disimpan');
+        return redirect('/buku')->with('pesan_sukses', 'Data buku berhasil disimpan');
     }
+    
     
 
     /**
@@ -101,7 +111,7 @@ class BukuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         // Validasi data
         $request->validate([
@@ -111,7 +121,7 @@ class BukuController extends Controller
             'tgl_terbit' => 'required|date',
         ]);
     
-        // Cari buku berdasarkan ID dan update datanya
+        // Update data buku
         $buku = Buku::findOrFail($id);
         $buku->judul = $request->judul;
         $buku->penulis = $request->penulis;
@@ -119,17 +129,34 @@ class BukuController extends Controller
         $buku->tgl_terbit = $request->tgl_terbit;
         $buku->save();
     
-        return redirect()->route('buku.index')->with('success', 'Buku berhasil diupdate');
+        // Redirect dengan pesan sukses
+        return redirect()->route('buku.index')->with('pesan_sukses', 'Data buku berhasil diupdate');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $buku = Buku::find($id);
         $buku->delete();
-
-        return redirect('/buku');
+    
+        // Redirect dengan pesan sukses
+        return redirect('/buku')->with('pesan_sukses', 'Data buku berhasil dihapus');
     }
+    
+    public function search(Request $request) {
+        $batas = 5;
+        $cari = $request->kata;
+        $data_buku = Buku::where('judul', 'like', "%" . $cari . "%")
+            ->orWhere('penulis', 'like', "%" . $cari . "%")
+            ->paginate($batas);
+        
+        $jumlah_buku = $data_buku->count();
+        $no = $batas * ($data_buku->currentPage() - 1);
+        
+        return view('buku.search', compact('jumlah_buku', 'data_buku', 'no', 'cari'));
+    }
+    
 }
