@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BukuController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+ 
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +19,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes([
+    'register' => false,
+    'reset' => false,
+    ]);
+
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/posts', [PostController::class, 'index']);
+Route::get('/buku', [BukuController::class, 'index'])->name('buku.dashboard');
+Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
+Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
+Route::delete('/buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
+Route::get('/buku/{id}/edit', [BukuController::class, 'edit'])->name('buku.edit');
+Route::put('/buku/{id}', [BukuController::class, 'update'])->name('buku.update');
+
+
+Route::post('/login', [LoginController::class, 'login'])->name(('login'));
+Route::get('/home', [App\Http\Controllers\BukuController::class, 'index'])->name('home');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
+// Rute untuk logout
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
+
