@@ -52,7 +52,7 @@ class BukuController extends Controller
     $jumlah_buku = $data_buku->count();
     $no = $batas * ($data_buku->currentPage() - 1);
         
-    return view('buku.index', compact('data_buku', 'total_buku', 'total_harga', 'cari'));
+    return view('buku.dashboard', compact('data_buku', 'total_buku', 'total_harga', 'cari'));
     }
 
 
