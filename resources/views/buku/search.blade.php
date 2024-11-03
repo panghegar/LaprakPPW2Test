@@ -23,7 +23,7 @@
      @if (Session::has('pesan_sukses'))
         <div class="alert alert-success">{{Session::get('pesan_sukses')}}</div>
     @endif
-    <a href="{{route('buku.create')}}" class="btn btn-primary float-end mt-5">Tambah Buku</a>
+    <!-- <a href="{{route('buku.create')}}" class="btn btn-primary float-end mt-5">Tambah Buku</a> -->
     <form action="{{ route('buku.search') }}" method="get">
         @csrf
         <input type="text" name="kata" class="form-control" placeholder="Cari ..." style="width: 30%; display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">

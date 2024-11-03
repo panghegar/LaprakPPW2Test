@@ -31,6 +31,12 @@ class BukuController extends Controller
     //     return view('buku.index', compact('data_buku', 'total_buku', 'total_harga'));    
     // }
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+
     public function index(Request $request)
     {
     $batas = 5;
@@ -61,6 +67,10 @@ class BukuController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->level !== 'admin') {
+            return redirect()->route('buku.index')->with('error', 'Hanya admin yang bisa menambahkan buku.');
+        }
+    
         return view('buku.create');
     }
 
@@ -68,26 +78,30 @@ class BukuController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // Validasi data input
-        $request->validate([
-            'judul' => 'required|string|max:255',
-            'penulis' => 'required|string|max:255',
-            'harga' => 'required|numeric',
-            'tgl_terbit' => 'required|date',
-        ]);
-    
-        // Membuat objek buku baru dan mengisi data
-        $buku = new Buku();
-        $buku->judul = $request->judul;
-        $buku->penulis = $request->penulis;
-        $buku->harga = $request->harga;
-        $buku->tgl_terbit = $request->tgl_terbit;
-        $buku->save();
-    
-        // Redirect dengan pesan sukses
-        return redirect('/buku')->with('pesan_sukses', 'Data buku berhasil disimpan');
+{
+    if (auth()->user()->level !== 'admin') {
+        return redirect()->route('buku.index')->with('error', 'Hanya admin yang bisa menambahkan buku.');
     }
+
+    // Validasi data input
+    $request->validate([
+        'judul' => 'required|string|max:255',
+        'penulis' => 'required|string|max:255',
+        'harga' => 'required|numeric',
+        'tgl_terbit' => 'required|date',
+    ]);
+
+    // Membuat objek buku baru dan mengisi data
+    $buku = new Buku();
+    $buku->judul = $request->judul;
+    $buku->penulis = $request->penulis;
+    $buku->harga = $request->harga;
+    $buku->tgl_terbit = $request->tgl_terbit;
+    $buku->save();
+
+    // Redirect dengan pesan sukses
+    return redirect('/buku')->with('pesan_sukses', 'Data buku berhasil disimpan');
+}
     
     
 
@@ -155,6 +169,7 @@ class BukuController extends Controller
         
         $jumlah_buku = $data_buku->count();
         $no = $batas * ($data_buku->currentPage() - 1);
+        
         
         return view('buku.search', compact('jumlah_buku', 'data_buku', 'no', 'cari'));
     }
