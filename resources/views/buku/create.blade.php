@@ -36,6 +36,12 @@
                 <label for="tgl_terbit">Tanggal Terbit</label>
                 <input type="date" name="tgl_terbit" id="tgl_terbit" class="form-control" required>
             </div>
+
+            <div class="form-group">
+                <label for="thumbnail">Pilih sampul buku</label>
+                <input type="file" name="thumbnail" id="thumbnail" class="form-control" required>
+            </div>
+
             <button type="submit" class="btn btn-primary mt-3">Simpan</button>
             <a href="{{ route('buku.index') }}" class="btn btn-secondary mt-3">Kembali</a>
         </form>

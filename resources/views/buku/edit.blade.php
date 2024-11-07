@@ -21,7 +21,7 @@
         @endif
 
         <h4>Edit Buku</h4>
-        <form method="post" action="{{ route('buku.update', $buku->id) }}">
+        <form method="post" action="{{ route('buku.update', $buku->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT') <!-- Method PUT untuk update data -->
 
@@ -43,6 +43,11 @@
             <div class="form-group">
                 <label for="tgl_terbit">Tanggal Terbit</label>
                 <input type="date" name="tgl_terbit" id="tgl_terbit" class="form-control" value="{{ $buku->tgl_terbit }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="thumbnail">Pilih sampul buku</label>
+                <input type="file" name="thumbnail" id="thumbnail" class="form-control" value="{{ $buku->filename }}" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

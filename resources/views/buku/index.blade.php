@@ -20,8 +20,6 @@
             @endif
         </div>
 
-
-
         @if(count($data_buku))
         <div class="alert alert-success mt-3">
             Ditemukan <strong>{{ count($data_buku) }}</strong> data dengan kata: <strong>{{ $cari }}</strong>
@@ -48,6 +46,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Gambar</th>
                     <th>Judul Buku</th>
                     <th>Penulis</th>
                     <th>Harga</th>
@@ -61,10 +60,18 @@
                 @foreach($data_buku as $buku)
                 <tr>
                     <td>{{ $buku->id }}</td>
+                    <td>
+                        @if($buku->filepath)
+                        <div class="relative h-10 w-10">
+                            <img class="h-full rounded-full object-cover object-center"
+                            src="{{ asset($buku->filepath) }}" alt="">
+                        </div>
+                        @endif
+                    </td>
                     <td>{{ $buku->judul }}</td>
                     <td>{{ $buku->penulis }}</td>
                     <td>{{ "Rp. " . number_format($buku->harga, 0, ',', '.') }}</td>
-                    <td>{{ ($buku->tgl_terbit)->format('d-m-Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('d-m-Y') }}</td>
                     @if(auth()->user()->level == 'admin')
                     <td>
                         <form action="{{ route('buku.destroy', $buku->id) }}" method="POST">
