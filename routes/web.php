@@ -44,5 +44,7 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 // Rute untuk logout
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+// Delete Gallery
+Route::delete('gallery/{galleryId}', [BukuController::class, 'destroyGallery'])->name('gallery.destroy');
 
 
