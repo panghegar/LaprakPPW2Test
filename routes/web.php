@@ -47,4 +47,6 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 // Delete Gallery
 Route::delete('gallery/{galleryId}', [BukuController::class, 'destroyGallery'])->name('gallery.destroy');
 
-
+Route::get('/bukuApi', function(){
+    return view('buku.buku');
+});

@@ -45,7 +45,7 @@
 
             <div class="form-group">
                 <label for="tgl_terbit">Tanggal Terbit</label>
-                <input type="date" name="tgl_terbit" value="{{ $buku->tgl_terbit }}" class="form-control" required>
+                <input type="date" name="tgl_terbit" value="{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('Y-m-d') }}" class="form-control" required>
             </div>
 
             <div class="form-group">
@@ -54,23 +54,6 @@
                 @if($buku->filepath)
                 <img src="{{ asset($buku->filepath) }}" alt="Thumbnail" width="150">
                 @endif
-            </div>
-
-            <!-- Displaying existing gallery images -->
-            <div class="form-group">
-                <label>Gallery</label>
-                <div class="gallery-display">
-                    @foreach($buku->galleries as $gallery)
-                    <div class="gallery-item" style="display: inline-block; margin: 5px;">
-                        <img src="{{ asset($gallery->path) }}" alt="Gallery Image" width="150">
-                        <form method="POST" action="{{ route('gallery.destroy', $gallery->id) }}" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                        </form>
-                    </div>
-                    @endforeach
-                </div>
             </div>
 
             <!-- Input for adding more gallery images -->
@@ -83,6 +66,23 @@
             <a href="{{ route('buku.index') }}" class="btn btn-secondary mt-3">Kembali</a>
         </form>
 
+
+        <!-- Displaying existing gallery images -->
+        <div class="form-group">
+            <label>Gallery</label>
+            <div class="gallery-display">
+                @foreach($buku->galleries as $gallery)
+                <div class="gallery-item" style="display: inline-block; margin: 5px;">
+                    <img src="{{ asset($gallery->path) }}" alt="Gallery Image" width="150">
+                    <form method="POST" action="{{ route('gallery.destroy', $gallery->id) }}" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                </div>
+                @endforeach
+            </div>
+        </div>
     </div>
 </body>
 
